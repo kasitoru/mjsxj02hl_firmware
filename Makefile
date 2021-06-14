@@ -20,7 +20,7 @@ pack:
 	rm -rf $(TEMP_DIR)
 
 unpack:
-	mkdir $(TEMP_DIR)
+	mkdir $(TEMP_DIR) $(OUTPUT_DIR)
 	./unpacker.py $(INPUT_FILE) $(TEMP_DIR)
 	unsquashfs -d $(OUTPUT_DIR)/app $(TEMP_DIR)/app.bin
 	unsquashfs -d $(OUTPUT_DIR)/kback $(TEMP_DIR)/kback.bin
