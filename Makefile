@@ -47,8 +47,6 @@ chmod:
 	find $(INPUT_DIR)/rootfs/usr/bin -type f -exec chmod 755 {} \;
 	find $(INPUT_DIR)/rootfs/usr/sbin -type f -exec chmod 755 {} \;
 	find $(INPUT_DIR)/rootfs/usr/share/udhcpc -type f -exec chmod 755 {} \;
-	chmod 755 $(INPUT_DIR)/rootfs/mkimg.rootfs
-	chmod 755 $(INPUT_DIR)/rootfs/mknod_console
 
 clean:
 	rm -f $(OUTPUT_FILE)
