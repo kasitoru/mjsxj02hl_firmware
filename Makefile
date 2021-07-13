@@ -30,24 +30,24 @@ unpack:
 
 chmod:
 	# all
-	find $(INPUT_DIR) -type f -exec chmod 644 {} \;
-	find $(INPUT_DIR) -type d -exec chmod 755 {} \;
+	-find $(INPUT_DIR) -type f -exec chmod 644 {} \;
+	-find $(INPUT_DIR) -type d -exec chmod 755 {} \;
 	# app
-	find $(INPUT_DIR)/app/bin -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/app/drv -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/app/lib -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/app/sbin -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/app/www/cgi-bin -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/app/bin -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/app/drv -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/app/lib -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/app/sbin -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/app/www/cgi-bin -type f -exec chmod 755 {} \;
 	# rootfs
-	find $(INPUT_DIR)/rootfs/bin -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/rootfs/etc/init.d -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/rootfs/lib -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/rootfs/sbin -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/rootfs/thirdlib -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/rootfs/usr/bin -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/rootfs/usr/sbin -type f -exec chmod 755 {} \;
-	find $(INPUT_DIR)/rootfs/usr/share/udhcpc -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/rootfs/bin -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/rootfs/etc/init.d -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/rootfs/lib -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/rootfs/sbin -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/rootfs/thirdlib -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/rootfs/usr/bin -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/rootfs/usr/sbin -type f -exec chmod 755 {} \;
+	-find $(INPUT_DIR)/rootfs/usr/share/udhcpc -type f -exec chmod 755 {} \;
 
 clean:
-	rm -f $(OUTPUT_FILE)
+	-rm -f $(OUTPUT_FILE)
 
