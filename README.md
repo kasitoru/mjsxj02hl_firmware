@@ -10,12 +10,17 @@ pip install click
 
 ## Usage
 
-### Unpack image:
+### Build firmware:
 ```bash
-make INPUT_FILE=image.bin OUTPUT_DIR=unpkg unpack
+make FIRMWARE_VER=x.y.z
 ```
 
-or (defaults input file `demo_hlc6.bin` and output directory `unpacked`):
+### Unpack image:
+```bash
+make FIRMWARE_FILE=image.bin FIRMWARE_DIR=unpkg unpack
+```
+
+or (defaults input file `demo_hlc6.bin` and output directory `temp/firmware`):
 
 ```bash
 make unpack
@@ -23,11 +28,11 @@ make unpack
 
 ### Pack image:
 ```bash
-make INPUT_DIR=unpkg OUTPUT_FILE=image.bin all
+make FIRMWARE_DIR=unpkg FIRMWARE_FILE=image.bin pack
 ```
 
-or (defaults input directory `unpacked` and output file `demo_hlc6.bin`):
+or (defaults input directory `temp/firmware` and output file `demo_hlc6.bin`):
 
 ```bash
-make all
+make pack
 ```
