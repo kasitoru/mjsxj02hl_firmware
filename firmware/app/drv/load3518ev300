@@ -1,0 +1,238 @@
+#!/bin/sh
+# Useage: ./load3518ev300 [ -r|-i|-a ] [ sensor ]
+#         -r : rmmod all modules
+#         -i : insmod all modules
+#    default : rmmod all moules and then insmod them
+# e.g: ./load3518ev300 -i -sensor0 imx307 -osmem 32M
+
+
+####################Variables Definition##########################
+SNS_TYPE0=f22;              # sensor type #gc2053 #sc3235 #f22
+YUV_TYPE0=0;                # 0 -- raw, 1 -- DC, 2 --bt656
+CHIP_TYPE=hi3518ev300;      # chip type
+BOARD=demo;
+
+#DDR start:0x40000000, kernel start:0x40000000, OS(32M); MMZ start:0x42000000
+mem_total=64                  # 64M, total mem
+mem_start=0x40000000          # phy mem start
+os_mem_size=32                # 32M, os mem
+mmz_start=0x42000000;         # mmz start addr
+mmz_size=32M;                 # 32M, mmz size
+##################################################################
+
+report_error()
+{
+	echo "******* Error: There's something wrong, please check! *****"
+	exit 1
+}
+
+insert_audio()
+{
+	echo "insert audio"
+	insmod hi3516ev200_aio.ko
+	insmod hi3516ev200_ai.ko
+	insmod hi3516ev200_ao.ko
+	insmod hi3516ev200_aenc.ko
+	insmod hi3516ev200_adec.ko
+	insmod hi3516ev200_acodec.ko
+}
+
+remove_audio()
+{
+	echo "remove audio"
+	rmmod hi3516ev200_acodec
+	rmmod hi3516ev200_adec
+	rmmod hi3516ev200_aenc
+	rmmod hi3516ev200_ao
+	rmmod hi3516ev200_ai
+	rmmod hi3516ev200_aio
+}
+
+insert_ko()
+{
+	echo "insert modules"
+	insmod sys_config.ko chip=$CHIP_TYPE sensors=$SNS_TYPE0 g_cmos_yuv_flag=$YUV_TYPE0 board=$BOARD
+	insmod hi_osal.ko anony=1 mmz_allocator=hisi mmz=anonymous,0,$mmz_start,$mmz_size || report_error
+	insmod hi3516ev200_base.ko
+	insmod hi3516ev200_sys.ko
+	insmod hi3516ev200_rgn.ko
+	insmod hi3516ev200_vgs.ko
+	insmod hi3516ev200_vi.ko
+	insmod hi3516ev200_isp.ko
+	insmod hi3516ev200_vpss.ko
+	insmod hi3516ev200_chnl.ko
+	insmod hi3516ev200_vedu.ko
+	insmod hi3516ev200_rc.ko
+	insmod hi3516ev200_venc.ko VencMaxChnNum=4
+	insmod hi3516ev200_h264e.ko
+	insmod hi3516ev200_h265e.ko
+	insmod hi3516ev200_jpege.ko
+	insmod hi3516ev200_ive.ko save_power=0 max_node_num=64
+	insmod extdrv/hi_pwm.ko
+	insmod extdrv/hi_sensor_i2c.ko
+	insert_audio
+	insmod hi_mipi_rx.ko
+}
+
+remove_ko()
+{
+	echo "remove modules"
+	remove_audio
+	rmmod hi_mipi_rx
+	rmmod hi3516ev200_ive
+	rmmod hi3516ev200_rc
+	rmmod hi3516ev200_jpege
+	rmmod hi3516ev200_h264e
+	rmmod hi3516ev200_h265e
+	rmmod hi3516ev200_venc
+	rmmod hi3516ev200_vedu
+	rmmod hi3516ev200_chnl
+	rmmod hi3516ev200_vpss
+	rmmod hi3516ev200_isp
+	rmmod hi3516ev200_vi
+	rmmod hi3516ev200_vgs
+	rmmod hi3516ev200_rgn
+	rmmod hi_sensor_i2c &> /dev/null
+	rmmod hi_pwm
+	rmmod hi3516ev200_sys
+	rmmod hi3516ev200_base
+	rmmod hi_osal
+	rmmod sys_config
+}
+
+
+load_usage()
+{
+	echo "Usage:  ./load3518ev300 [-option] [sensor_name]"
+	echo "options:"
+	echo "    -i                       insert modules"
+	echo "    -r                       remove modules"
+	echo "    -a                       remove modules first, then insert modules"
+	echo "    -sensor sensor_name      config sensor type [default: f22]"
+	echo "    -h                       help information"
+	echo -e "Available sensors: sc2231 gc2053 sc4236 sc2235 etc."
+	echo -e "for example: ./load3518ev300 -i -sensor imx307 -osmem 32M -board demo\n"
+}
+
+calc_mmz_info()
+{
+	mmz_start=`echo "$mem_start $os_mem_size"  |
+	awk 'BEGIN { temp = 0; }
+	{
+		temp = $1/1024/1024 + $2;
+	}
+	END { printf("0x%x00000\n", temp); }'`
+
+	mmz_size=`echo "$mem_total $os_mem_size"  |
+	awk 'BEGIN { temp = 0; }
+	{
+		temp = $1 - $2;
+	}
+	END { printf("%dM\n", temp); }'`
+	echo "mmz_start: $mmz_start, mmz_size: $mmz_size"
+}
+
+echo "load3518ev300 $@"
+echo "mem_total: $mem_total, mem_start: $mem_start"
+
+######################parse arg###################################
+b_arg_sensor0=0
+b_arg_sensor1=0
+b_arg_yuv_type0=0
+b_arg_insmod=0
+b_arg_remove=0
+b_arg_os_mem=0
+b_arg_board=0
+
+for arg in $@
+do
+	if [ $b_arg_sensor0 -eq 1 ] ; then
+		b_arg_sensor0=0;
+		SNS_TYPE0=$arg;
+	fi
+
+	if [ $b_arg_os_mem -eq 1 ] ; then
+		b_arg_os_mem=0;
+		os_mem_size=$arg;
+
+		if [ -z $os_mem_size ]; then
+			echo "[error] os_mem_size is null"
+			exit;
+		fi
+	fi
+
+	if [ $b_arg_yuv_type0 -eq 1 ] ; then
+		b_arg_yuv_type0=0;
+		YUV_TYPE0=$arg;
+	fi
+
+	if [ $b_arg_board -eq 1 ] ; then
+		b_arg_board=0;
+		BOARD=$arg;
+	fi
+
+	case $arg in
+		"-i")
+			b_arg_insmod=1;
+			echo "[rcS] exec insmod handler..."
+			;;
+		"-r")
+			b_arg_remove=1;
+			echo "[rcS] exec remove handler..."
+			;;
+		"-a")
+			b_arg_insmod=1;
+			b_arg_remove=1;
+			echo "[rcS] exec remod handler..."
+			;;
+		"-h")
+			load_usage;
+			;;
+		"-sensor0")
+			b_arg_sensor0=1;
+			echo "[rcS] set -sensor0 parameter..."
+			;;
+		"-sensor")
+			b_arg_sensor0=1;
+			echo "[rcS] set -sensor parameter..."
+			;;
+		"-osmem")
+			b_arg_os_mem=1;
+			echo "[rcS] set -osmem parameter..."
+			;;
+		"-yuv0")
+			b_arg_yuv_type0=1;
+			echo "[rcS] set -yuv0 parameter..."
+			;;
+		"-board")
+			b_arg_board=1;
+			echo "[rcS] set -board parameter..."
+			;;
+	esac
+done
+#######################parse arg end########################
+
+echo "os_mem_size: $os_mem_size"
+
+if [ $(echo $os_mem_size | tr -dc '0-9') -ge $mem_total ] ; then
+	echo "[err] os_mem[$os_mem_size], over total_mem[$mem_total]"
+	exit;
+fi
+
+calc_mmz_info;
+
+#######################Action###############################
+
+if [ $# -lt 1 ]; then
+	load_usage;
+	exit 0;
+fi
+
+if [ $b_arg_remove -eq 1 ]; then
+	remove_ko;
+fi
+
+if [ $b_arg_insmod -eq 1 ]; then
+	insert_ko;
+fi
+

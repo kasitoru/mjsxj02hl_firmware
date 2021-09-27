@@ -1,0 +1,33 @@
+# /etc/profile: system-wide .profile file for the Bourne shells
+#
+#
+
+set_path_before()
+{
+        [ -d $1 ] && PATH="$1:$PATH"
+}
+
+PATH="/usr/bin:/usr/sbin:/bin:/sbin:/usr/app/bin:/usr/app/sbin"
+set_path_before /usr/local/sbin
+set_path_before /usr/local/bin
+
+LD_LIBRARY_PATH=/lib:/usr/lib:/usr/app/lib
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/app/bin:/usr/app/sbin
+export LD_LIBRARY_PATH=/thirdlib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH PATH
+export PATH
+
+# ANSI COLORS
+NORMAL=""
+RED=""
+GREEN=""
+YELLOW=""
+BLUE=""
+MAGENTA=""
+CYAN=""
+WHITE=""
+
+umask 077
+
+echo "${GREEN}Welcome to HiLinux.${NORMAL}"
+

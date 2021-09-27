@@ -1,0 +1,81 @@
+#!/bin/sh
+
+/bin/mount -a
+
+echo " __________________________________
+|                                  |
+|                                  |
+|                                  |
+|                                  |
+| _   _             _           _  |
+|| | | |_   _  __ _| |     __ _(_) |
+|| |_| | | | |/ _| | |  _ / _| | | |
+||  _  | |_| | (_| | |_| | (_| | | |
+||_| |_|\__,_|\__,_|_____|\__,_|_| |
+|                                  |
+|                                  |
+|___________________HuaLai_Fw...___|
+"
+
+# Run init scripts
+for initscript in /etc/init.d/S[0-9][0-9]*
+do
+	if [ -x $initscript ] ;
+	then
+		echo "[RCS]: $initscript"
+		$initscript
+	fi
+done
+
+# Mount rootfs
+echo "Start mount rootfs..."
+echo "mount -t squashfs /dev/mtdblock3 /usr/app"
+mount -t squashfs /dev/mtdblock3 /usr/app
+echo "mount -t squashfs /dev/mtdblock4 /backk"
+mount -t squashfs /dev/mtdblock4 /backk
+echo "mount -t squashfs /dev/mtdblock5 /backa"
+mount -t squashfs /dev/mtdblock5 /backa
+echo "mount -t jffs2 /dev/mtdblock6 /configs"
+mount -t jffs2 /dev/mtdblock6 /configs
+echo "mount /dev/mmcblk0p1 /mnt/mmc"
+mkdir /mnt/mmc
+mount /dev/mmcblk0p1 /mnt/mmc
+
+# Set environment variables
+echo "LD_LIBRARY_PATH=/lib:/usr/lib:/usr/app/lib"
+LD_LIBRARY_PATH=/lib:/usr/lib:/usr/app/lib
+echo "PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/app/bin:/usr/app/sbin"
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/app/bin:/usr/app/sbin
+echo "export LD_LIBRARY_PATH=/thirdlib:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH=/thirdlib:$LD_LIBRARY_PATH
+echo "export LD_LIBRARY_PATH PATH"
+export LD_LIBRARY_PATH PATH
+
+# Init Wi-Fi
+echo "exec himm"
+himm 0x112C0048 0x1D54
+himm 0x112C004C 0x1174
+himm 0x112C0064 0x1174
+himm 0x112C0060 0x1174
+himm 0x112C005C 0x1174
+himm 0x112C0058 0x1174
+himm 0x10020028 0x28000000
+himm 0x10020028 0x20000000
+echo "insmod /usr/app/drv/wifi_drv/cfg80211.ko"
+insmod /usr/app/drv/wifi_drv/cfg80211.ko
+echo "insmod /usr/app/drv/wifi_drv/rtl8189ftv.ko"
+insmod /usr/app/drv/wifi_drv/rtl8189ftv.ko
+
+# Init modules
+cd /usr/app/drv/
+./load3518ev300 -i -sensor0 f22 -osmem $(cat /proc/cmdline | grep -ioE 'mem=[0-9]+M' | cut -f2 -d=)
+cd -
+
+# Init local network
+echo "ifconfig lo up"
+ifconfig lo up
+
+# Init application
+echo "/usr/app/bin/init_app.sh"
+/usr/app/bin/init_app.sh
+

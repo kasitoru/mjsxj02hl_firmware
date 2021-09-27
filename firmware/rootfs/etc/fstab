@@ -1,0 +1,6 @@
+proc		/proc		proc	defaults,nodev,nosuid	0	0
+sysfs		/sys		sysfs	defaults,nodev,nosuid	0	0
+tmpfs		/tmp		tmpfs	defaults				0	0
+tmpfs		/dev		tmpfs	defaults				0	0
+tmpfs		/run		tmpfs	defaults				0	0
+tmpfs		/mnt		tmpfs	defaults				0	0
