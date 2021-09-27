@@ -9,8 +9,7 @@ CCFLAGS       := -march=armv7-a -mfpu=neon-vfpv4 -funsafe-math-optimizations
 LDPATH        := /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
 
 .SILENT:
-
-all: mkdirs application web pack
+all: mkdirs application web chmod pack
 
 application:
 	git clone --recurse-submodules "https://github.com/avdeevsv91/mjsxj02hl_application" "$(TEMPORARY_DIR)/application"
@@ -25,6 +24,26 @@ web:
 	cp -arf $(TEMPORARY_DIR)/web/lib/. $(FIRMWARE_DIR)/app/lib
 	cp -arf $(TEMPORARY_DIR)/web/share/. $(FIRMWARE_DIR)/app/share
 	cp -arf $(TEMPORARY_DIR)/web/www/. $(FIRMWARE_DIR)/app/www
+
+chmod:
+	# all
+	-find $(FIRMWARE_DIR) -type f -exec chmod 644 {} \;
+	-find $(FIRMWARE_DIR) -type d -exec chmod 755 {} \;
+	# app
+	-find $(FIRMWARE_DIR)/app/bin -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/app/drv -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/app/lib -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/app/sbin -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/app/www/cgi-bin -type f -exec chmod 755 {} \;
+	# rootfs
+	-find $(FIRMWARE_DIR)/rootfs/bin -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/rootfs/etc/init.d -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/rootfs/lib -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/rootfs/sbin -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/rootfs/thirdlib -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/rootfs/usr/bin -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/rootfs/usr/sbin -type f -exec chmod 755 {} \;
+	-find $(FIRMWARE_DIR)/rootfs/usr/share/udhcpc -type f -exec chmod 755 {} \;
 
 pack:
 	mksquashfs $(FIRMWARE_DIR)/app $(FIRMWARE_DIR)/app.bin -b 131072 -comp xz -Xdict-size 100%
