@@ -12,13 +12,13 @@ LDPATH        := /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
 all: mkdirs application web chmod pack
 
 application:
-	git clone --recurse-submodules "https://github.com/avdeevsv91/mjsxj02hl_application" "$(TEMPORARY_DIR)/application"
+	git clone --recurse-submodules "https://github.com/kasitoru/mjsxj02hl_application" "$(TEMPORARY_DIR)/application"
 	make -C "$(TEMPORARY_DIR)/application" CROSS_COMPILE="$(CROSS_COMPILE)" CCFLAGS="$(CCFLAGS)" LDPATH="$(LDPATH)"
 	cp -f $(TEMPORARY_DIR)/application/bin/mjsxj02hl $(FIRMWARE_DIR)/app/bin
 	cp -arf $(TEMPORARY_DIR)/application/lib/. $(FIRMWARE_DIR)/app/lib
 
 web:
-	git clone "https://github.com/avdeevsv91/mjsxj02hl_web" "$(TEMPORARY_DIR)/web"
+	git clone "https://github.com/kasitoru/mjsxj02hl_web" "$(TEMPORARY_DIR)/web"
 	make -C "$(TEMPORARY_DIR)/web" CROSS_COMPILE="$(CROSS_COMPILE)" CCFLAGS="$(CCFLAGS)"
 	cp -arf $(TEMPORARY_DIR)/web/bin/. $(FIRMWARE_DIR)/app/bin
 	cp -arf $(TEMPORARY_DIR)/web/lib/. $(FIRMWARE_DIR)/app/lib
