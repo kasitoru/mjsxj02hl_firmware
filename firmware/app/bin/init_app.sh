@@ -1,5 +1,15 @@
 #!/bin/sh
 
+echo
+echo "============================="
+echo " MJXSJ02HL CUSTOM FIRMWARE"
+echo -n " VERSION: "
+cat /usr/app/share/.version
+echo " AUTHOR: Kasito"
+echo " HOMEPAGE: https://kasito.ru"
+echo "============================="
+echo
+
 # Generate device id
 if [ ! -f /usr/app/share/.device_id ]; then
 	tr -dc a-z0-9 < /dev/urandom | head -c 8 > /usr/app/share/.device_id
