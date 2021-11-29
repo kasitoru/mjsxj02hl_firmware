@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Generate device id
+if [ ! -f /usr/app/share/.device_id ]; then
+	tr -dc a-z0-9 < /dev/urandom | head -c 8 > /usr/app/share/.device_id
+fi
+
 # Set default timezone
 if [ ! -f /etc/TZ ]; then
 	echo "Set default timezone (UTC+3:00)"
