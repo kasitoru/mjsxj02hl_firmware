@@ -12,6 +12,7 @@ echo
 
 # Generate device id
 if [ ! -f /usr/app/share/.device_id ]; then
+	echo "Generate new Device ID..."
 	tr -dc a-z0-9 < /dev/urandom | head -c 8 > /usr/app/share/.device_id
 fi
 
