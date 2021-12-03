@@ -13,7 +13,7 @@ CCFLAGS       := -march=armv7-a -mfpu=neon-vfpv4 -funsafe-math-optimizations
 LDPATH        := /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
 
 .SILENT:
-all: mkdirs application web curl chmod pack
+all: mkdirs install-libs application web curl chmod pack
 
 application:
 	git clone --recurse-submodules --branch "$(BRANCH)" "https://github.com/kasitoru/mjsxj02hl_application" "$(TEMPORARY_DIR)/application"
@@ -88,4 +88,9 @@ else
 	$(eval FIRMWARE_VERB = $(FIRMWARE_VER)-$(BRANCH))
 endif
 	echo $(FIRMWARE_VERB) > $(FIRMWARE_DIR)/app/share/.version
+
+install-libs:
+	-cp -arf $(FIRMWARE_DIR)/app/lib/. $(LDPATH)
+	-cp -arf $(FIRMWARE_DIR)/rootfs/lib/. $(LDPATH)
+	-cp -arf $(FIRMWARE_DIR)/rootfs/thirdlib/. $(LDPATH)
 
