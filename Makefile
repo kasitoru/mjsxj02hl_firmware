@@ -1,16 +1,17 @@
-BRANCH        := main
+BRANCH                := main
 
-CURL_VERSION  := 7.80.0
+CURL_VERSION          := 7.80.0
+OPENSSL_VERSION       := OpenSSL_1_1_1-stable
 
-TEMPORARY_DIR := temp
+TEMPORARY_DIR         := temp
 
-FIRMWARE_SRC  := firmware
-FIRMWARE_DIR  := $(TEMPORARY_DIR)/firmware
-FIRMWARE_FILE := demo_hlc6.bin
+FIRMWARE_SRC          := firmware
+FIRMWARE_DIR          := $(TEMPORARY_DIR)/firmware
+FIRMWARE_FILE         := demo_hlc6.bin
 
-CROSS_COMPILE := arm-himix100-linux
-CCFLAGS       := -march=armv7-a -mfpu=neon-vfpv4 -funsafe-math-optimizations
-LDPATH        := /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
+CROSS_COMPILE         := arm-himix100-linux
+CCFLAGS               := -march=armv7-a -mfpu=neon-vfpv4 -funsafe-math-optimizations
+LDPATH                := /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
 
 .SILENT:
 all: mkdirs install-libs application web curl chmod pack
@@ -29,7 +30,16 @@ web:
 	cp -arf $(TEMPORARY_DIR)/web/share/. $(FIRMWARE_DIR)/app/share
 	cp -arf $(TEMPORARY_DIR)/web/www/. $(FIRMWARE_DIR)/app/www
 
-curl:
+openssl:
+	git clone --branch "$(OPENSSL_VERSION)" "https://github.com/openssl/openssl" "$(TEMPORARY_DIR)/openssl"
+	cd $(TEMPORARY_DIR)/openssl && ./Configure linux-armv4 shared no-afalgeng no-async
+	make -C "$(TEMPORARY_DIR)/openssl" CROSS_COMPILE="$(CROSS_COMPILE)-" CFLAG="$(CCFLAGS)"
+	#cp -fP $(TEMPORARY_DIR)/openssl/libcrypto.so* $(FIRMWARE_DIR)/rootfs/thirdlib
+	#cp -fP $(TEMPORARY_DIR)/openssl/libssl.so* $(FIRMWARE_DIR)/rootfs/thirdlib
+	cp -fP $(TEMPORARY_DIR)/openssl/libcrypto.so* $(LDPATH)
+	cp -fP $(TEMPORARY_DIR)/openssl/libssl.so* $(LDPATH)
+
+curl: openssl
 	wget -O "$(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz" "https://curl.se/download/curl-$(CURL_VERSION).tar.gz"
 	tar -xf $(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz -C $(TEMPORARY_DIR) && mv $(TEMPORARY_DIR)/curl-$(CURL_VERSION) $(TEMPORARY_DIR)/curl
 	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" --enable-shared --disable-static --without-ssl --without-zlib
@@ -73,6 +83,7 @@ unpack:
 clean:
 	-make -C "$(TEMPORARY_DIR)/application" clean
 	-make -C "$(TEMPORARY_DIR)/web" clean
+	-make -C "$(TEMPORARY_DIR)/openssl" clean
 	-make -C "$(TEMPORARY_DIR)/curl" clean
 	-rm -rf $(TEMPORARY_DIR)/*
 	-rm -f $(FIRMWARE_FILE)
