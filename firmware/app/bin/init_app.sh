@@ -1,29 +1,45 @@
 #!/bin/sh
 
-# Set default timezone
-if [ ! -f /configs/TZ ]; then
-	echo "Set default timezone (UTC+3:00)"
-	echo "UTC-3:00" > /configs/TZ
+echo
+echo "============================="
+echo " MJXSJ02HL CUSTOM FIRMWARE"
+echo -n " VERSION: "
+cat /usr/app/share/.version
+echo " AUTHOR: Kasito"
+echo " HOMEPAGE: https://kasito.ru"
+echo "============================="
+echo
+
+# Generate device id
+if [ ! -f /usr/app/share/.device_id ]; then
+	echo "Generate new Device ID..."
+	tr -dc a-z0-9 < /dev/urandom | head -c 8 > /usr/app/share/.device_id
 fi
 
-# Copy wpa_supplicant.conf from sd-card to configs directory
+# Set default timezone
+if [ ! -f /etc/TZ ]; then
+	echo "Set default timezone (UTC+3:00)"
+	echo "UTC-3:00" > /etc/TZ
+fi
+
+# Copy wpa_supplicant.conf from sd-card
 if [ -f /mnt/mmc/wpa_supplicant.conf ]; then
 	echo "Copy wpa_supplicant.conf from sd-card..."
-	cp -f /mnt/mmc/wpa_supplicant.conf /configs/wifi.conf
-	chmod 644 /configs/wifi.conf
+	cp -f /mnt/mmc/wpa_supplicant.conf /etc/wpa_supplicant.conf
+	chmod 644 /etc/wpa_supplicant.conf
 fi
 
-# Copy mjsxj02hl.conf from sd-card to configs directory
+# Copy mjsxj02hl.conf from sd-card
 if [ -f /mnt/mmc/mjsxj02hl.conf ]; then
 	echo "Copy mjsxj02hl.conf from sd-card..."
-	cp -f /mnt/mmc/mjsxj02hl.conf /configs/mjsxj02hl.conf
-	chmod 644 /configs/mjsxj02hl.conf
+	cp -f /mnt/mmc/mjsxj02hl.conf /usr/app/share/mjsxj02hl.conf
+	chmod 644 /usr/app/share/mjsxj02hl.conf
 fi
 
 # Create empty configuration file if it is missing
-if [ ! -f /configs/mjsxj02hl.conf ]; then
-	touch /configs/mjsxj02hl.conf
-	chmod 644 /configs/mjsxj02hl.conf
+if [ ! -f /usr/app/share/mjsxj02hl.conf ]; then
+	touch /usr/app/share/mjsxj02hl.conf
+	chmod 644 /usr/app/share/mjsxj02hl.conf
 fi
 
 # Connect to Wi-Fi
