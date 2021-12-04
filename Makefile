@@ -1,7 +1,7 @@
 BRANCH                := main
 
+OPENSSL_VERSION       := 1.1.1l
 CURL_VERSION          := 7.80.0
-OPENSSL_VERSION       := OpenSSL_1_1_1-stable
 
 TEMPORARY_DIR         := temp
 
@@ -31,22 +31,24 @@ web:
 	cp -arf $(TEMPORARY_DIR)/web/www/. $(FIRMWARE_DIR)/app/www
 
 openssl:
-	git clone --branch "$(OPENSSL_VERSION)" "https://github.com/openssl/openssl" "$(TEMPORARY_DIR)/openssl"
-	cd $(TEMPORARY_DIR)/openssl && ./Configure linux-armv4 shared no-afalgeng no-async
+	wget -O "$(TEMPORARY_DIR)/openssl-$(OPENSSL_VERSION).tar.gz" "https://www.openssl.org/source/openssl-$(OPENSSL_VERSION).tar.gz"
+	tar -xf $(TEMPORARY_DIR)/openssl-$(OPENSSL_VERSION).tar.gz -C $(TEMPORARY_DIR) && mv $(TEMPORARY_DIR)/openssl-$(OPENSSL_VERSION) $(TEMPORARY_DIR)/openssl
+	cd $(TEMPORARY_DIR)/openssl && ./Configure linux-armv4 shared no-hw no-afalgeng no-async no-aria no-asm no-autoerrinit no-autoload-config no-bf no-blake2 no-camellia no-capieng no-cast no-chacha no-cmac no-cms no-comp no-ct no-deprecated no-dgram no-dso no-dtls no-dynamic-engine no-ec no-ec2m no-ecdh no-ecdsa no-err no-filenames no-gost no-makedepend no-mdc2 no-multiblock no-pinshared no-ocb no-poly1305 no-posix-io no-psk no-rc2 no-rc4 no-rdrand no-rfc3779 no-rmd160 no-scrypt no-seed no-siphash no-sm2 no-sm3 no-sm4 no-srtp no-sse2 no-ssl no-static-engine no-stdio no-tests no-threads no-ts no-whirlpool no-idea no-srp no-tls
 	make -C "$(TEMPORARY_DIR)/openssl" CROSS_COMPILE="$(CROSS_COMPILE)-" CFLAG="$(CCFLAGS)"
-	#cp -fP $(TEMPORARY_DIR)/openssl/libcrypto.so* $(FIRMWARE_DIR)/rootfs/thirdlib
-	#cp -fP $(TEMPORARY_DIR)/openssl/libssl.so* $(FIRMWARE_DIR)/rootfs/thirdlib
+	cp -fP $(TEMPORARY_DIR)/openssl/libcrypto.so* $(FIRMWARE_DIR)/rootfs/thirdlib
+	cp -fP $(TEMPORARY_DIR)/openssl/libssl.so* $(FIRMWARE_DIR)/rootfs/thirdlib
 	cp -fP $(TEMPORARY_DIR)/openssl/libcrypto.so* $(LDPATH)
 	cp -fP $(TEMPORARY_DIR)/openssl/libssl.so* $(LDPATH)
 
 curl: openssl
 	wget -O "$(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz" "https://curl.se/download/curl-$(CURL_VERSION).tar.gz"
 	tar -xf $(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz -C $(TEMPORARY_DIR) && mv $(TEMPORARY_DIR)/curl-$(CURL_VERSION) $(TEMPORARY_DIR)/curl
-	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" LDFLAGS="-L$(LDPATH)" --enable-shared --disable-static --disable-manual --without-openssl --without-zlib --disable-ipv6 --disable-dict --disable-file --disable-ftp --disable-gopher --disable-imap --disable-mqtt --disable-pop3 --disable-rtsp --disable-smtp --disable-telnet --disable-tftp
+	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" LDFLAGS="-L$(LDPATH)" --enable-shared --disable-static --disable-manual --disable-libcurl-option --with-openssl --without-zlib --disable-ipv6 --disable-dict --disable-file --disable-ftp --disable-gopher --disable-imap --disable-mqtt --disable-pop3 --disable-rtsp --disable-smtp --disable-telnet --disable-tftp --disable-smb
 	make -C "$(TEMPORARY_DIR)/curl"
 	cp -f $(TEMPORARY_DIR)/curl/src/.libs/curl $(FIRMWARE_DIR)/rootfs/bin
 	ln -fs ../../bin/curl $(FIRMWARE_DIR)/rootfs/usr/bin/curl
 	cp -fP $(TEMPORARY_DIR)/curl/lib/.libs/libcurl.so* $(FIRMWARE_DIR)/rootfs/thirdlib
+	cp -fP $(TEMPORARY_DIR)/curl/lib/.libs/libcurl.so* $(LDPATH)
 
 chmod:
 	# all
