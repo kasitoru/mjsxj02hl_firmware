@@ -25,14 +25,14 @@ fi
 # Copy wpa_supplicant.conf from sd-card
 if [ -f /mnt/mmc/wpa_supplicant.conf ]; then
 	echo "Copy wpa_supplicant.conf from sd-card..."
-	cp -f /mnt/mmc/wpa_supplicant.conf /etc/wpa_supplicant.conf
+	cp -f /mnt/mmc/wpa_supplicant.conf $(readlink /etc/wpa_supplicant.conf)
 	chmod 644 /etc/wpa_supplicant.conf
 fi
 
 # Copy mjsxj02hl.conf from sd-card
 if [ -f /mnt/mmc/mjsxj02hl.conf ]; then
 	echo "Copy mjsxj02hl.conf from sd-card..."
-	cp -f /mnt/mmc/mjsxj02hl.conf /usr/app/share/mjsxj02hl.conf
+	cp -f /mnt/mmc/mjsxj02hl.conf $(readlink /usr/app/share/mjsxj02hl.conf)
 	chmod 644 /usr/app/share/mjsxj02hl.conf
 fi
 
