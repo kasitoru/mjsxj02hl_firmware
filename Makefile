@@ -21,6 +21,7 @@ application:
 	git clone --recurse-submodules --branch "$(BRANCH)" "https://github.com/kasitoru/mjsxj02hl_application" "$(TEMPORARY_DIR)/application"
 	make -C "$(TEMPORARY_DIR)/application" CROSS_COMPILE="$(CROSS_COMPILE)-" CCFLAGS="$(CCFLAGS)" LDPATH="$(LDPATH)"
 	cp -f $(TEMPORARY_DIR)/application/bin/mjsxj02hl $(FIRMWARE_DIR)/app/bin
+	cp -f $(TEMPORARY_DIR)/application/bin/ipctool $(FIRMWARE_DIR)/rootfs/bin
 	cp -arf $(TEMPORARY_DIR)/application/lib/. $(FIRMWARE_DIR)/app/lib
 
 web:
