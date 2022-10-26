@@ -10,12 +10,6 @@ echo " HOMEPAGE: https://kasito.ru"
 echo "============================="
 echo
 
-# Generate device id
-if [ ! -f /usr/app/share/.device_id ]; then
-	echo "Generate new Device ID..."
-	tr -dc a-z0-9 < /dev/urandom | head -c 8 > /usr/app/share/.device_id
-fi
-
 # Set default timezone
 if [ ! -f /etc/TZ ]; then
 	echo "Set default timezone (UTC+3:00)"
@@ -25,14 +19,14 @@ fi
 # Copy wpa_supplicant.conf from sd-card
 if [ -f /mnt/mmc/wpa_supplicant.conf ]; then
 	echo "Copy wpa_supplicant.conf from sd-card..."
-	cp -f /mnt/mmc/wpa_supplicant.conf /etc/wpa_supplicant.conf
+	cp -f /mnt/mmc/wpa_supplicant.conf $(readlink /etc/wpa_supplicant.conf)
 	chmod 644 /etc/wpa_supplicant.conf
 fi
 
 # Copy mjsxj02hl.conf from sd-card
 if [ -f /mnt/mmc/mjsxj02hl.conf ]; then
 	echo "Copy mjsxj02hl.conf from sd-card..."
-	cp -f /mnt/mmc/mjsxj02hl.conf /usr/app/share/mjsxj02hl.conf
+	cp -f /mnt/mmc/mjsxj02hl.conf $(readlink /usr/app/share/mjsxj02hl.conf)
 	chmod 644 /usr/app/share/mjsxj02hl.conf
 fi
 
