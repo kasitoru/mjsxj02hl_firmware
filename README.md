@@ -1,6 +1,9 @@
 # mjsxj02hl_firmware
 Build tools for mjsxj02hl firmware
 
+**Attention! This firmware is no longer supported by the author. We recommend using [OpenIPC](https://github.com/OpenIPC/device-mjsxj02hl).**
+
+
 ## Dependencies
 
 ```bash
