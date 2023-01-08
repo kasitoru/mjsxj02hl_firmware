@@ -19,7 +19,7 @@ fi
 # Set default password for root
 if [ ! -f /etc/shadow ]; then
 	echo "Set default password for root user..."
-	echo "root:a8kQIzA4687P.:::::::" > /etc/shadow
+	echo -e "toor\ntoor" | passwd -a des root
 fi
 
 # Set default timezone
