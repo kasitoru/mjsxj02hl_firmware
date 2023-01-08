@@ -18,7 +18,7 @@ fi
 
 # Set default password for root
 if [ ! -f /etc/shadow ]; then
-	echo "Set default password for root user"
+	echo "Set default password for root user..."
 	echo "root:a8kQIzA4687P.:::::::" > /etc/shadow
 fi
 
