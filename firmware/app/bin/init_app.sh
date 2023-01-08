@@ -10,15 +10,10 @@ echo " HOMEPAGE: https://kasito.ru"
 echo "============================="
 echo
 
-# Create root user
-if [ ! -f /etc/passwd ]; then
-	echo "Create root user..."
-	echo "root:x:0:0:root:/:/bin/sh" > /etc/passwd
-fi
-
 # Set default password for root
-if [ ! -f /etc/shadow ]; then
+if [ ! -f /etc/passwd ]; then
 	echo "Set default password for root user..."
+	echo "root:x:0:0:root:/:/bin/sh" > /etc/passwd
 	echo -e "toor\ntoor" | passwd -a des root
 fi
 
