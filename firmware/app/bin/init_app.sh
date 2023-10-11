@@ -76,6 +76,12 @@ tcpsvd -vE 0.0.0.0 21 ftpd -w / &
 echo "Starting main application..."
 mjsxj02hl &
 
+# Execute run.sh from configs
+if [ -f /configs/run.sh ]; then
+	echo "Execute /configs/run.sh script..."
+	/configs/run.sh &
+fi
+
 # Execute run.sh from sd-card
 if [ -f /mnt/mmc/run.sh ]; then
 	echo "Execute /mnt/mmc/run.sh script..."
