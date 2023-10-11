@@ -10,6 +10,13 @@ echo " HOMEPAGE: https://kasito.ru"
 echo "============================="
 echo
 
+# Set default password for root
+if [ ! -f /etc/passwd ]; then
+	echo "Set default password for root user..."
+	echo "root:x:0:0:root:/:/bin/sh" > /etc/passwd
+	echo -e "toor\ntoor" | passwd -a des root
+fi
+
 # Set default timezone
 if [ ! -f /etc/TZ ]; then
 	echo "Set default timezone (UTC+3:00)"

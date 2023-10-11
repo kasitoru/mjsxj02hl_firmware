@@ -1,8 +1,8 @@
 BRANCH                := main
 
-ZLIB_VERSION          := 1.2.11
-OPENSSL_VERSION       := 1.1.1l
-CURL_VERSION          := 7.80.0
+ZLIB_VERSION          := 1.2.13
+OPENSSL_VERSION       := 1.1.1s
+CURL_VERSION          := 7.87.0
 
 TEMPORARY_DIR         := temp
 
@@ -54,7 +54,7 @@ curl: openssl zlib
 	wget -O "$(FIRMWARE_DIR)/rootfs/usr/local/cacert.pem" "https://curl.haxx.se/ca/cacert.pem"
 	wget -O "$(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz" "https://curl.se/download/curl-$(CURL_VERSION).tar.gz"
 	tar -xf $(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz -C $(TEMPORARY_DIR) && mv $(TEMPORARY_DIR)/curl-$(CURL_VERSION) $(TEMPORARY_DIR)/curl
-	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" LDFLAGS="-L$(LDPATH)" --enable-shared --disable-static --disable-manual --disable-libcurl-option --with-openssl --with-zlib --disable-ipv6 --disable-dict --disable-file --disable-ftp --disable-gopher --disable-imap --disable-mqtt --disable-pop3 --disable-rtsp --disable-smtp --disable-telnet --disable-tftp --disable-smb --with-ca-bundle=/usr/local/cacert.pem
+	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" LDFLAGS="-L$(LDPATH)" --enable-shared --disable-static --disable-manual --disable-libcurl-option --with-openssl --with-zlib --disable-ipv6 --disable-dict --disable-file --disable-ftp --disable-gopher --disable-imap --disable-mqtt --disable-pop3 --disable-smtp --disable-telnet --disable-tftp --disable-smb --with-ca-bundle=/usr/local/cacert.pem
 	make -C "$(TEMPORARY_DIR)/curl"
 	cp -f $(TEMPORARY_DIR)/curl/src/.libs/curl $(FIRMWARE_DIR)/rootfs/bin
 	ln -fs ../../bin/curl $(FIRMWARE_DIR)/rootfs/usr/bin/curl
