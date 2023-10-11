@@ -79,6 +79,5 @@ mjsxj02hl &
 # Execute run.sh from sd-card
 if [ -f /mnt/mmc/run.sh ]; then
 	echo "Execute /mnt/mmc/run.sh script..."
-	/mnt/mmc/run.sh
+	/mnt/mmc/run.sh &
 fi
-
