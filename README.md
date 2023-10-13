@@ -10,7 +10,7 @@ Build tools for mjsxj02hl firmware
 ## Dependencies
 
 ```bash
-sudo apt install u-boot-tools dbus
+sudo apt install u-boot-tools dbus python3-pip
 pip install click
 ```
 
