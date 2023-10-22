@@ -39,6 +39,7 @@ fi
 
 # Create empty configuration file if it is missing
 if [ ! -f /usr/app/share/mjsxj02hl.conf ]; then
+	echo "Create empty configuration file..."
 	touch /usr/app/share/mjsxj02hl.conf
 	chmod 644 /usr/app/share/mjsxj02hl.conf
 fi
