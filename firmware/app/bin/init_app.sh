@@ -44,6 +44,18 @@ if [ ! -f /usr/app/share/mjsxj02hl.conf ]; then
 	chmod 644 /usr/app/share/mjsxj02hl.conf
 fi
 
+# Create default run.sh file if it is missing
+if [ ! -f /configs/run.sh ]; then
+	echo "reate default run.sh file..."
+	touch /configs/run.sh
+	echo "#"'!'"/bin/sh" >> /configs/run.sh
+	echo >> /configs/run.sh
+	echo "# Launching the watchdog" >> /configs/run.sh
+	echo "watchdog.sh &" >> /configs/run.sh
+	echo >> /configs/run.sh
+	chmod 755 /configs/run.sh
+fi
+
 # Connect to Wi-Fi
 ifconfig wlan0 up
 if [ -f /etc/wpa_supplicant.conf ]; then
