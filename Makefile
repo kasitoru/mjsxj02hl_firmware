@@ -22,15 +22,15 @@ application:
 	make -C "$(TEMPORARY_DIR)/application" CROSS_COMPILE="$(CROSS_COMPILE)-" CCFLAGS="$(CCFLAGS)" LDPATH="$(LDPATH)"
 	cp -f $(TEMPORARY_DIR)/application/bin/mjsxj02hl $(FIRMWARE_DIR)/app/bin
 	cp -f $(TEMPORARY_DIR)/application/bin/ipctool $(FIRMWARE_DIR)/rootfs/bin
-	cp -arf $(TEMPORARY_DIR)/application/lib/. $(FIRMWARE_DIR)/app/lib
+	cp -rf $(TEMPORARY_DIR)/application/lib/. $(FIRMWARE_DIR)/app/lib
 
 web:
 	git clone --branch "$(BRANCH)" "https://github.com/kasitoru/mjsxj02hl_web" "$(TEMPORARY_DIR)/web"
 	make -C "$(TEMPORARY_DIR)/web" CROSS_COMPILE="$(CROSS_COMPILE)-" CCFLAGS="$(CCFLAGS)"
-	cp -arf $(TEMPORARY_DIR)/web/bin/. $(FIRMWARE_DIR)/app/bin
-	cp -arf $(TEMPORARY_DIR)/web/lib/. $(FIRMWARE_DIR)/app/lib
-	cp -arf $(TEMPORARY_DIR)/web/share/. $(FIRMWARE_DIR)/app/share
-	cp -arf $(TEMPORARY_DIR)/web/www/. $(FIRMWARE_DIR)/app/www
+	cp -rf $(TEMPORARY_DIR)/web/bin/. $(FIRMWARE_DIR)/app/bin
+	cp -rf $(TEMPORARY_DIR)/web/lib/. $(FIRMWARE_DIR)/app/lib
+	cp -rf $(TEMPORARY_DIR)/web/share/. $(FIRMWARE_DIR)/app/share
+	cp -rf $(TEMPORARY_DIR)/web/www/. $(FIRMWARE_DIR)/app/www
 
 zlib:
 	wget -O "$(TEMPORARY_DIR)/zlib-$(ZLIB_VERSION).tar.gz" "http://www.zlib.net/zlib-$(ZLIB_VERSION).tar.gz"
@@ -50,11 +50,11 @@ openssl: zlib
 	cp -fP $(TEMPORARY_DIR)/openssl/libcrypto.so* $(LDPATH)
 	cp -fP $(TEMPORARY_DIR)/openssl/libssl.so* $(LDPATH)
 
-curl: openssl zlib
+curl: zlib openssl
 	wget -O "$(FIRMWARE_DIR)/rootfs/usr/local/cacert.pem" "https://curl.haxx.se/ca/cacert.pem"
 	wget -O "$(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz" "https://curl.se/download/curl-$(CURL_VERSION).tar.gz"
 	tar -xf $(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz -C $(TEMPORARY_DIR) && mv $(TEMPORARY_DIR)/curl-$(CURL_VERSION) $(TEMPORARY_DIR)/curl
-	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" LDFLAGS="-L$(LDPATH)" --enable-shared --disable-static --disable-manual --disable-libcurl-option --with-openssl=$(CURDIR)/$(TEMPORARY_DIR)/openssl --with-zlib --disable-ipv6 --disable-dict --disable-file --disable-ftp --disable-gopher --disable-imap --disable-mqtt --disable-pop3 --disable-smtp --disable-telnet --disable-tftp --disable-smb --with-ca-bundle=/usr/local/cacert.pem
+	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" LDFLAGS="-L$(LDPATH)" --enable-shared --disable-static --disable-manual --disable-libcurl-option --with-openssl=$(CURDIR)/$(TEMPORARY_DIR)/openssl --with-zlib=$(CURDIR)/$(TEMPORARY_DIR)/zlib --disable-ipv6 --disable-dict --disable-file --disable-ftp --disable-gopher --disable-imap --disable-mqtt --disable-pop3 --disable-smtp --disable-telnet --disable-tftp --disable-smb --with-ca-bundle=/usr/local/cacert.pem
 	make -C "$(TEMPORARY_DIR)/curl"
 	cp -f $(TEMPORARY_DIR)/curl/src/.libs/curl $(FIRMWARE_DIR)/rootfs/bin
 	ln -fs ../../bin/curl $(FIRMWARE_DIR)/rootfs/usr/bin/curl
@@ -115,7 +115,7 @@ endif
 	echo $(FIRMWARE_VERB) > $(FIRMWARE_DIR)/app/share/.version
 
 install-libs:
-	-cp -arf $(FIRMWARE_DIR)/app/lib/. $(LDPATH)
-	-cp -arf $(FIRMWARE_DIR)/rootfs/lib/. $(LDPATH)
-	-cp -arf $(FIRMWARE_DIR)/rootfs/thirdlib/. $(LDPATH)
+	-cp -rf $(FIRMWARE_DIR)/app/lib/. $(LDPATH)
+	-cp -rf $(FIRMWARE_DIR)/rootfs/lib/. $(LDPATH)
+	-cp -rf $(FIRMWARE_DIR)/rootfs/thirdlib/. $(LDPATH)
 
