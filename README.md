@@ -11,7 +11,7 @@ Build tools for mjsxj02hl firmware
 1. Install dependencies:
 
 ```bash
-sudo apt install git cmake u-boot-tools dbus python3-pip
+sudo apt install git cmake lib32z1 lib32stdc++6 u-boot-tools dbus python3-pip dos2unix
 pip install click
 ```
 
