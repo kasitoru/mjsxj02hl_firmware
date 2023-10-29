@@ -6,13 +6,13 @@ Build tools for mjsxj02hl firmware
 
 **Attention! This firmware is no longer supported by the author. We recommend using [OpenIPC](https://github.com/OpenIPC/device-mjsxj02hl).**
 
-## Preparation of tools
+## Preparation
 
 1. Install dependencies:
 
 ```bash
 sudo apt install git cmake lib32z1 lib32stdc++6 u-boot-tools dbus python3-pip dos2unix
-pip install click
+pip3 install click
 ```
 
 2. Install Hi3518Ev300 toolchain:
