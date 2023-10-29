@@ -1,18 +1,18 @@
-BRANCH                := main
+BRANCH          := main
 
-ZLIB_VERSION          := 1.3
-OPENSSL_VERSION       := 1.1.1w
-CURL_VERSION          := 8.4.0
+ZLIB_VERSION    := 1.3
+OPENSSL_VERSION := 1.1.1w
+CURL_VERSION    := 8.4.0
 
-TEMPORARY_DIR         := temp
+TEMPORARY_DIR   := temp
 
-FIRMWARE_SRC          := firmware
-FIRMWARE_DIR          := $(TEMPORARY_DIR)/firmware
-FIRMWARE_FILE         := demo_hlc6.bin
+FIRMWARE_SRC    := firmware
+FIRMWARE_DIR    := $(TEMPORARY_DIR)/firmware
+FIRMWARE_FILE   := demo_hlc6.bin
 
-CROSS_COMPILE         := arm-himix100-linux
-CCFLAGS               := -march=armv7-a -mfpu=neon-vfpv4 -funsafe-math-optimizations
-LDPATH                := /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
+CROSS_COMPILE   := arm-himix100-linux
+CCFLAGS         := -march=armv7-a -mfpu=neon-vfpv4 -funsafe-math-optimizations
+LDPATH          := /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
 
 .SILENT:
 all: mkdirs install-libs application web curl chmod pack
