@@ -11,7 +11,7 @@ Build tools for mjsxj02hl firmware
 1. Install dependencies:
 
 ```bash
-sudo apt install git u-boot-tools dbus python3-pip
+sudo apt install git cmake u-boot-tools dbus python3-pip
 pip install click
 ```
 
@@ -20,6 +20,7 @@ pip install click
 ```bash
 tar -zxf arm-himix100-linux.tgz
 sudo ./arm-himix100-linux.install
+gnome-session-quit
 ```
 
 3. Creating a directory for shared libraries and setting permissions:
