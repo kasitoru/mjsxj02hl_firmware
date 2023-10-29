@@ -22,20 +22,18 @@ tar -zxf arm-himix100-linux.tgz
 sudo ./arm-himix100-linux.install
 ```
 
-3. Clone the repository:
-
-```bash
-git clone https://github.com/kasitoru/mjsxj02hl_firmware
-cd mjsxj02hl_firmware
-```
-
-4. Copy the libraries from directory `/usr/app/lib` of the original firmware to directory `/opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib`:
+3. Creating a directory for shared libraries and setting permissions:
 
 ```bash
 sudo mkdir -p /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
 sudo chmod 777 /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
+```
 
-cp -a ./firmware/app/lib/. /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib/
+4. Clone the repository:
+
+```bash
+git clone https://github.com/kasitoru/mjsxj02hl_firmware
+cd mjsxj02hl_firmware
 ```
 
 ## Usage
