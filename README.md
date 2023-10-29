@@ -33,7 +33,7 @@ cd mjsxj02hl_firmware
 
 ```bash
 sudo mkdir -p /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
-sudo chmod 755 /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
+sudo chmod 777 /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
 
 cp -a ./firmware/app/lib/. /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib/
 ```
