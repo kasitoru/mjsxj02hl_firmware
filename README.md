@@ -30,14 +30,14 @@ sudo mkdir -p /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
 sudo chmod 777 /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
 ```
 
-4. Clone the repository:
+## Usage
+
+Clone the repository:
 
 ```bash
 git clone https://github.com/kasitoru/mjsxj02hl_firmware
 cd mjsxj02hl_firmware
 ```
-
-## Usage
 
 ### Build firmware:
 ```bash
