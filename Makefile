@@ -52,12 +52,11 @@ curl: zlib openssl
 	wget -O "$(FIRMWARE_DIR)/rootfs/usr/local/cacert.pem" "https://curl.haxx.se/ca/cacert.pem"
 	wget -O "$(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz" "https://curl.se/download/curl-$(CURL_VERSION).tar.gz"
 	tar -xf $(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz -C $(TEMPORARY_DIR) && mv $(TEMPORARY_DIR)/curl-$(CURL_VERSION) $(TEMPORARY_DIR)/curl
-	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" LDFLAGS="-L$(LDPATH)" --enable-shared --disable-static --disable-manual --disable-libcurl-option --with-openssl=$(CURDIR)/$(TEMPORARY_DIR)/openssl --with-zlib=$(CURDIR)/$(TEMPORARY_DIR)/zlib --disable-ipv6 --disable-dict --disable-file --disable-ftp --disable-gopher --disable-imap --disable-mqtt --disable-pop3 --disable-smtp --disable-telnet --disable-tftp --disable-smb --with-ca-bundle=/usr/local/cacert.pem
+	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" LDFLAGS="-Wl,-rpath-link $(CURDIR)/$(TEMPORARY_DIR)/openssl" --enable-shared --disable-static --disable-manual --disable-libcurl-option --with-openssl=$(CURDIR)/$(TEMPORARY_DIR)/openssl --with-zlib=$(CURDIR)/$(TEMPORARY_DIR)/zlib --disable-ipv6 --disable-dict --disable-file --disable-ftp --disable-gopher --disable-imap --disable-mqtt --disable-pop3 --disable-smtp --disable-telnet --disable-tftp --disable-smb --with-ca-bundle=/usr/local/cacert.pem
 	make -C "$(TEMPORARY_DIR)/curl"
 	cp -f $(TEMPORARY_DIR)/curl/src/.libs/curl $(FIRMWARE_DIR)/rootfs/bin
 	ln -fs ../../bin/curl $(FIRMWARE_DIR)/rootfs/usr/bin/curl
 	cp -fP $(TEMPORARY_DIR)/curl/lib/.libs/libcurl.so* $(FIRMWARE_DIR)/rootfs/thirdlib
-	cp -fP $(TEMPORARY_DIR)/curl/lib/.libs/libcurl.so* $(LDPATH)
 
 chmod:
 	# all
