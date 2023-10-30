@@ -18,11 +18,11 @@ pip3 install click
 2. Install Hi3518Ev300 toolchain:
 
 ```bash
-sudo mkdir /opt/hisi-linux
-sudo chmod 777 /opt/hisi-linux
 tar -zxf arm-himix100-linux.tgz
-source ./arm-himix100-linux.install
-mkdir -p /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
+cd arm-himix100-linux
+sudo ./arm-himix100-linux.install
+sudo mkdir -p /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
+sudo chmod 777 /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
 gnome-session-quit
 ```
 
