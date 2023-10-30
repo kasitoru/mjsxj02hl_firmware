@@ -46,7 +46,7 @@ openssl: zlib
 	make -C "$(TEMPORARY_DIR)/openssl" CROSS_COMPILE="$(CROSS_COMPILE)-" CFLAGS="$(CCFLAGS)"
 	cp -fP $(TEMPORARY_DIR)/openssl/libcrypto.so* $(FIRMWARE_DIR)/rootfs/thirdlib
 	cp -fP $(TEMPORARY_DIR)/openssl/libssl.so* $(FIRMWARE_DIR)/rootfs/thirdlib
-	ln -fs ./ lib
+	ln -fs ./ $(TEMPORARY_DIR)/openssl/lib
 
 curl: zlib openssl
 	wget -O "$(FIRMWARE_DIR)/rootfs/usr/local/cacert.pem" "https://curl.haxx.se/ca/cacert.pem"
