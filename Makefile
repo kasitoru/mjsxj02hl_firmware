@@ -33,12 +33,11 @@ web:
 	cp -rf $(TEMPORARY_DIR)/web/www/. $(FIRMWARE_DIR)/app/www
 
 zlib:
-	wget -O "$(TEMPORARY_DIR)/zlib-$(ZLIB_VERSION).tar.gz" "http://www.zlib.net/zlib-$(ZLIB_VERSION).tar.gz"
+	wget -O "$(TEMPORARY_DIR)/zlib-$(ZLIB_VERSION).tar.gz" "https://www.zlib.net/fossils/zlib-$(ZLIB_VERSION).tar.gz"
 	tar -xf $(TEMPORARY_DIR)/zlib-$(ZLIB_VERSION).tar.gz -C $(TEMPORARY_DIR) && mv $(TEMPORARY_DIR)/zlib-$(ZLIB_VERSION) $(TEMPORARY_DIR)/zlib
 	cd $(TEMPORARY_DIR)/zlib && CROSS_PREFIX="$(CROSS_COMPILE)-" CFLAGS="$(CCFLAGS)" ./configure
 	make -C "$(TEMPORARY_DIR)/zlib"
 	cp -fP $(TEMPORARY_DIR)/zlib/libz.so* $(FIRMWARE_DIR)/rootfs/thirdlib
-	cp -fP $(TEMPORARY_DIR)/zlib/libz.so* $(LDPATH)
 
 openssl: zlib
 	wget -O "$(TEMPORARY_DIR)/openssl-$(OPENSSL_VERSION).tar.gz" "https://www.openssl.org/source/openssl-$(OPENSSL_VERSION).tar.gz"
