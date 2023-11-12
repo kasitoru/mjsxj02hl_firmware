@@ -6,15 +6,34 @@ Build tools for mjsxj02hl firmware
 
 **Attention! This firmware is no longer supported by the author. We recommend using [OpenIPC](https://github.com/OpenIPC/device-mjsxj02hl).**
 
+## Preparation
 
-## Dependencies
+1. Install dependencies:
 
 ```bash
-sudo apt install u-boot-tools dbus
-pip install click
+sudo apt install git cmake lib32z1 lib32stdc++6 u-boot-tools dbus python3-pip dos2unix
+pip3 install click
+```
+
+2. Install Hi3518Ev300 toolchain:
+
+```bash
+tar -zxf arm-himix100-linux.tgz
+cd arm-himix100-linux
+sudo ./arm-himix100-linux.install
+sudo mkdir -p /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
+sudo chmod 777 /opt/hisi-linux/x86-arm/arm-himix100-linux/target/usr/app/lib
+gnome-session-quit
 ```
 
 ## Usage
+
+Clone the repository:
+
+```bash
+git clone https://github.com/kasitoru/mjsxj02hl_firmware
+cd mjsxj02hl_firmware
+```
 
 ### Build firmware:
 ```bash

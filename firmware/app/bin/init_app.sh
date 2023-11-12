@@ -39,8 +39,21 @@ fi
 
 # Create empty configuration file if it is missing
 if [ ! -f /usr/app/share/mjsxj02hl.conf ]; then
+	echo "Create empty configuration file..."
 	touch /usr/app/share/mjsxj02hl.conf
 	chmod 644 /usr/app/share/mjsxj02hl.conf
+fi
+
+# Create default run.sh file if it is missing
+if [ ! -f /configs/run.sh ]; then
+	echo "reate default run.sh file..."
+	touch /configs/run.sh
+	echo "#"'!'"/bin/sh" >> /configs/run.sh
+	echo >> /configs/run.sh
+	echo "# Launching the watchdog" >> /configs/run.sh
+	echo "watchdog.sh &" >> /configs/run.sh
+	echo >> /configs/run.sh
+	chmod 755 /configs/run.sh
 fi
 
 # Connect to Wi-Fi
@@ -76,9 +89,14 @@ tcpsvd -vE 0.0.0.0 21 ftpd -w / &
 echo "Starting main application..."
 mjsxj02hl &
 
+# Execute run.sh from configs
+if [ -f /configs/run.sh ]; then
+	echo "Execute /configs/run.sh script..."
+	/configs/run.sh &
+fi
+
 # Execute run.sh from sd-card
 if [ -f /mnt/mmc/run.sh ]; then
 	echo "Execute /mnt/mmc/run.sh script..."
-	/mnt/mmc/run.sh
+	/mnt/mmc/run.sh &
 fi
-
