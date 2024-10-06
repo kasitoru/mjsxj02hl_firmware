@@ -2,7 +2,7 @@ BRANCH          := main
 
 ZLIB_VERSION    := 1.3.1
 OPENSSL_VERSION := 1.1.1w
-CURL_VERSION    := 8.6.0
+CURL_VERSION    := 8.10.1
 
 TEMPORARY_DIR   := temp
 
