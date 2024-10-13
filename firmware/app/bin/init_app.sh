@@ -51,7 +51,8 @@ if [ ! -f /configs/run.sh ]; then
 	echo "#"'!'"/bin/sh" >> /configs/run.sh
 	echo >> /configs/run.sh
 	echo "# Launching the watchdog" >> /configs/run.sh
-	echo "watchdog.sh &" >> /configs/run.sh
+	echo "# Specify the IP of your router" >> /configs/run.sh
+	echo "#watchdog.sh 192.168.1.1 &" >> /configs/run.sh
 	echo >> /configs/run.sh
 	chmod 755 /configs/run.sh
 fi
