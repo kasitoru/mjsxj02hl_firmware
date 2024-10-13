@@ -1,8 +1,8 @@
 BRANCH          := main
 
-ZLIB_VERSION    := 1.3
+ZLIB_VERSION    := 1.3.1
 OPENSSL_VERSION := 1.1.1w
-CURL_VERSION    := 8.4.0
+CURL_VERSION    := 8.10.1
 
 TEMPORARY_DIR   := temp
 
@@ -52,8 +52,8 @@ curl: zlib openssl
 	wget -O "$(FIRMWARE_DIR)/rootfs/usr/local/cacert.pem" "https://curl.haxx.se/ca/cacert.pem"
 	wget -O "$(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz" "https://curl.se/download/curl-$(CURL_VERSION).tar.gz"
 	tar -xf $(TEMPORARY_DIR)/curl-$(CURL_VERSION).tar.gz -C $(TEMPORARY_DIR) && mv $(TEMPORARY_DIR)/curl-$(CURL_VERSION) $(TEMPORARY_DIR)/curl
-	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" LDFLAGS="-Wl,-rpath-link $(CURDIR)/$(TEMPORARY_DIR)/openssl" --enable-shared --disable-static --disable-manual --disable-libcurl-option --with-openssl=$(CURDIR)/$(TEMPORARY_DIR)/openssl --with-zlib=$(CURDIR)/$(TEMPORARY_DIR)/zlib --disable-ipv6 --disable-dict --disable-file --disable-ftp --disable-gopher --disable-imap --disable-mqtt --disable-pop3 --disable-smtp --disable-telnet --disable-tftp --disable-smb --with-ca-bundle=/usr/local/cacert.pem
-	make -C "$(TEMPORARY_DIR)/curl"
+	cd $(TEMPORARY_DIR)/curl && ./configure --host="$(CROSS_COMPILE)" CC="$(CROSS_COMPILE)-gcc" CFLAGS="$(CCFLAGS)" LDFLAGS="-Wl,-rpath-link $(CURDIR)/$(TEMPORARY_DIR)/openssl" --enable-shared --disable-static --disable-manual --disable-libcurl-option --with-openssl=$(CURDIR)/$(TEMPORARY_DIR)/openssl --with-zlib=$(CURDIR)/$(TEMPORARY_DIR)/zlib --without-libpsl --disable-ftp --disable-file --disable-ldap --disable-ldaps --disable-proxy --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher --disable-mqtt --disable-manual --disable-docs --disable-ipv6 --disable-versioned-symbols --disable-windows-unicode --disable-threaded-resolver --disable-verbose --disable-kerberos-auth --disable-negotiate-auth --disable-form-api --disable-progress-meter --disable-dateparse --disable-netrc --disable-dnsshuffle --disable-alt-svc --disable-headers-api --disable-hsts --disable-websockets --with-ca-bundle=/usr/local/cacert.pem
+	make -C "$(TEMPORARY_DIR)/curl" CURL_LDFLAGS_LIB="-Wl,-rpath-link $(CURDIR)/$(TEMPORARY_DIR)/openssl"
 	cp -f $(TEMPORARY_DIR)/curl/src/.libs/curl $(FIRMWARE_DIR)/rootfs/bin
 	ln -fs ../../bin/curl $(FIRMWARE_DIR)/rootfs/usr/bin/curl
 	cp -fP $(TEMPORARY_DIR)/curl/lib/.libs/libcurl.so* $(FIRMWARE_DIR)/rootfs/thirdlib

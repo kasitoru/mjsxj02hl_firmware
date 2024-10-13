@@ -2,7 +2,8 @@
 
 GATEWAY=${1:-"192.168.1.1"}
 
-errors=0
+network_errors=0
+application_errors=0
 while true; do
     # Network connection
     if ! ping -c 1 $GATEWAY &> /dev/null; then
@@ -12,20 +13,20 @@ while true; do
         ifconfig wlan0 up
         wpa_supplicant -B -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf
         udhcpc -b -i wlan0
-        errors=$((errors+1))
+        network_errors=$((network_errors+1))
     else
-        errors=0
+        network_errors=0
     fi
     # Main application
     if ! killall -0 mjsxj02hl &> /dev/null; then
         echo "Restarting main application..."
         mjsxj02hl &
-        errors=$((errors+1))
+        application_errors=$((application_errors+1))
     else
-        errors=0
+        application_errors=0
     fi
     # Reboot if there are many errors
-    if [ $errors -ge 5 ]; then
+    if [ $network_errors -ge 5 ] || [ $application_errors -ge 5 ]; then
         echo "Too many errors! Rebooting the device..."
         reboot
     fi
