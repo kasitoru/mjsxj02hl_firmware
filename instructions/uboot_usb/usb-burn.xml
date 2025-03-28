@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="GB2312" ?>
+<Partition_Info ProgrammerFile="">
+<Part Sel="0" PartitionName="fastboot" FlashType="spi" FileSystem="none" Start="0" Length="256K" SelectFile="u-boot-hi3518ev300.bin"/>
+<Part Sel="0" PartitionName="kernel" FlashType="spi" FileSystem="none" Start="256K" Length="1984K" SelectFile=""/>
+<Part Sel="0" PartitionName="rootfs" FlashType="spi" FileSystem="none" Start="2240K" Length="3904K" SelectFile=""/>
+<Part Sel="0" PartitionName="app" FlashType="spi" FileSystem="none" Start="6M" Length="3904K" SelectFile=""/>
+<Part Sel="0" PartitionName="kback" FlashType="spi" FileSystem="none" Start="10048K" Length="1984K" SelectFile=""/>
+<Part Sel="0" PartitionName="aback" FlashType="spi" FileSystem="none" Start="12032K" Length="3904K" SelectFile=""/>
+<Part Sel="0" PartitionName="cfg" FlashType="spi" FileSystem="none" Start="15936K" Length="384K" SelectFile=""/>
+<Part Sel="0" PartitionName="para" FlashType="spi" FileSystem="none" Start="16320K" Length="64K" SelectFile=""/>
+</Partition_Info>
